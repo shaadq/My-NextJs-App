@@ -86,6 +86,7 @@ export default function Page() {
           <Logout />
         </div>
       </Header>
+      
       <div className="content-wrapper">
         {/* <Table columns={columns} dataSource={products} loading={loading} /> */}
         {loading ? (

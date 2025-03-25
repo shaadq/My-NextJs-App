@@ -1,0 +1,14 @@
+.custom-tabs-wrapper {
+  border-bottom: 1px solid rgb(185, 185, 185);
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  .custom-tab-item {
+    text-decoration: none;
+    color: rgb(185, 185, 185);
+    margin-bottom: -0.5px;
+  }
+  .custom-tab-item.custom-tab-active {
+    border-bottom: 3px solid #28a745;
+  }
+}

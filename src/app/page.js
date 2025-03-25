@@ -1,6 +1,5 @@
-import React from "react";
-import Login from "../components/login/Login";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return <React.Fragment></React.Fragment>;
+  redirect("/login");
 }

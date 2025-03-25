@@ -41,6 +41,11 @@ export const myServices = {
     return response.data.products;
   },
 
+  fetchProductByID: async (id) => {
+    const response = await axiosInstance.get(apiList.getProducts + `/${id}`);
+    return response.data;
+  },
+
   fetchAllCategories: async () => {
     const response = await axiosInstance.get(apiList.getProductCategories);
     return response.data;

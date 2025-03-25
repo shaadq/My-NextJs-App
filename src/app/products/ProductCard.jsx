@@ -1,11 +1,20 @@
 import Badge from "@/components/common/badge/Badge";
 import { Rate } from "antd";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { Spinner } from "react-bootstrap";
 
 const ProductCard = ({ item, index }) => {
+  const router = useRouter();
+  const handleProductClick = () => {
+    router.push(`/products/${item.id}`);
+  };
+
   return (
-    <div className="product-card border border-1 rounded-3 h-100">
+    <div
+      className="product-card border border-1 rounded-3 h-100 cursor-pointer"
+      onClick={handleProductClick}
+    >
       <div className="top-wrapper d-flex pt-3">
         <img
           className="w-100 product-img mx-auto" // Hide until loaded
