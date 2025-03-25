@@ -1,0 +1,37 @@
+import "./Sidebar.scss";
+import Link from "next/link";
+import React from "react";
+import { MdOutlineCategory, MdOutlineDashboard } from "react-icons/md";
+import { RiProfileLine } from "react-icons/ri";
+import { AiOutlineProduct, AiOutlineSetting } from "react-icons/ai";
+import { useAppContext } from "@/app/context/AppContext";
+
+const Sidebar = () => {
+  const { toggle } = useAppContext();
+  const list = [
+    { title: "Dashboard", link: "/dashboard", icon: <MdOutlineDashboard /> },
+    { title: "Products", link: "/products", icon: <AiOutlineProduct /> },
+    { title: "Categories", link: "/categories", icon: <MdOutlineCategory /> },
+    { title: "Profile", link: "/profile", icon: <RiProfileLine /> },
+    { title: "Settings", link: "/settings", icon: <AiOutlineSetting /> },
+  ];
+  return (
+    <div
+      className={`sidebar bg-success text-white ${
+        toggle ? "hide-sidebar" : ""
+      }`}
+    >
+      <h2 className="text-center mt-3">My App</h2>
+      <div className="sidebar-list mt-5 mx-auto pe-3">
+        {list.map((item, index) => (
+          <Link href={`${item.link}`} key={index}>
+            <div className="me-2">{item.icon}</div>
+            <div className="item fw-semibold">{item.title}</div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Sidebar;

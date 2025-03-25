@@ -1,0 +1,31 @@
+.product-card {
+  .product-title {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  .product-badge {
+    width: fit-content;
+    border: 1px solid;
+    font-size: 12px;
+    padding: 0px 9px;
+    text-transform: uppercase;
+  }
+  .product-img {
+    max-width: 192px;
+  }
+}
+
+.custom-star .ant-rate-star {
+  font-size: 19px !important; /* Adjust star size */
+}
+
+.custom-star.ant-rate .ant-rate-star:not(:last-child){
+    margin-inline-end: 5px;
+}
+
+.custom-star .ant-rate-star-full,
+.custom-star .ant-rate-star-half .ant-rate-star-first,
+.custom-star .ant-rate-star-half .ant-rate-star-second {
+  color: rgb(46, 110, 173) !important; /* Change star color (gold) */
+}

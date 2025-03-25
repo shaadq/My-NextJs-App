@@ -1,0 +1,27 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+}
+.hide-sidebar {
+  margin-left: -250px;
+  color: rgba(255, 0, 0, 0.699);
+}
+
+.sidebar-list {
+  a {
+    color: #fff;
+    text-decoration: none;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    margin-bottom: 16px;
+  }
+  svg {
+    color: #fff;
+  }
+  .item {
+    color: #fff;
+    // font-size: 18px;
+  }
+}
