@@ -32,7 +32,9 @@ const Sidebar = () => {
           <Link
             href={item.link}
             key={index}
-            className={`sidebar-item ${pathname === item.link ? "active" : ""}`}
+            className={`sidebar-item ${
+              pathname.startsWith(item.link) ? "active" : ""
+            }`}
           >
             <div className="me-2 d-flex">{item.icon}</div>
             <div className="item fw-semibold">{item.title}</div>
