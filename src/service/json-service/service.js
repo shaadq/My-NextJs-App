@@ -60,4 +60,13 @@ export const myServices = {
     const response = await axiosInstance.get(apiList.getAllUsers + `/${id}`);
     return response.data;
   },
+
+  updateUser: async (id, data) => {
+    const response = await axiosInstance.put(
+      apiList.getAllUsers + `/${id}`,
+      data
+    );
+
+    console.log(response);
+  },
 };

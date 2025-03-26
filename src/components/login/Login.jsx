@@ -39,12 +39,12 @@ const Login = () => {
       </Col>
       <Col md={6}>
         <div className="h-100vh h-100vh d-flex flex-column justify-content-center">
-          <h2 className="text-center mb-5">Login</h2>
+          <h2 className="text-center mb-5 ">Login</h2>
           <Row className="justify-content-center">
             <Col md={6}>
               <Form>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label>Username</Form.Label>
+                  <Form.Label className="fw-semibold">Username</Form.Label>
                   <Form.Control
                     placeholder="Enter email"
                     value={formData.username}
@@ -53,8 +53,8 @@ const Login = () => {
                   />
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBasicPassword">
-                  <Form.Label>Password</Form.Label>
+                <Form.Group className="mb-5" controlId="formBasicPassword">
+                  <Form.Label className="fw-semibold">Password</Form.Label>
                   <Form.Control
                     type="password"
                     placeholder="Password"
@@ -69,10 +69,13 @@ const Login = () => {
                     onClick={handleSubmit}
                     className="mx-auto"
                     disabled={loading}
+                    style={{ width: "150px" }}
                   >
-                    {" "}
-                    <span>Submit</span>
-                    {loading && <Spinner className="ms-2" size="sm" />}
+                    {loading ? (
+                      <Spinner className="ms-2" size="sm" />
+                    ) : (
+                      <span>Login</span>
+                    )}
                   </Button>
                 </div>
               </Form>
