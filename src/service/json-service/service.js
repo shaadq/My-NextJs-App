@@ -55,4 +55,9 @@ export const myServices = {
     const response = await axiosInstance.get(apiList.getAllUsers);
     return response.data.users;
   },
+
+  fetchSingleUser: async (id) => {
+    const response = await axiosInstance.get(apiList.getAllUsers + `/${id}`);
+    return response.data;
+  },
 };

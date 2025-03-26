@@ -43,3 +43,18 @@ export const enumList = {
     },
   },
 };
+
+export const pageTitleList = {
+  titles: {
+    login: "Next App - Login",
+    dashboard: "Next App - Dashboard",
+    products: "Next App - Products",
+    categories: "Next App - Categories",
+    settings: "Next App - Settings",
+  },
+  subtitles: {
+    "user-management": "Settings - User Management",
+    document: "Settings - Document",
+    profile: "Settings - Profile",
+  },
+};

@@ -8,12 +8,7 @@ export default function Page() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const cookieInfo = Cookies.get("user");
-      if (cookieInfo) {
-        setUser(JSON.parse(cookieInfo));
-      }
-    }
+    setUser(JSON.parse(Cookies.get("user")));
   }, []);
 
   return (

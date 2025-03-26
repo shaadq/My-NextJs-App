@@ -16,15 +16,16 @@ export default function SettingsLayout({ children }) {
       link: "/settings/user-management",
       icon: <LiaUsersCogSolid />,
     },
-    {
-      title: "Documents",
-      link: "/settings/document",
-      icon: <IoDocumentAttachOutline />,
-    },
+
     {
       title: "Profile",
       link: "/settings/profile",
       icon: <RiProfileLine />,
+    },
+    {
+      title: "Documents",
+      link: "/settings/document",
+      icon: <IoDocumentAttachOutline />,
     },
   ];
 
@@ -54,8 +55,10 @@ export default function SettingsLayout({ children }) {
           ))}
         </div>
 
-        {/* ✅ Works like `Outlet` */}
-        <div className="py-4">{children}</div>
+        {/* Works like `Outlet` */}
+        <div className="py-4" style={{ height: "calc(100% - 31px)" }}>
+          {children}
+        </div>
       </div>
     </div>
   );

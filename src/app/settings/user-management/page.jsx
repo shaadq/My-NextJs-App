@@ -2,7 +2,7 @@
 import { enumList } from "@/enum-list/enumList";
 import { myServices } from "@/service/json-service/service";
 import { Table } from "antd";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Badge } from "react-bootstrap";
 
 export default function UserManagement() {
@@ -64,8 +64,8 @@ export default function UserManagement() {
   ];
 
   return (
-    <div>
+    <React.Fragment>
       <Table columns={columns} dataSource={users} loading={loading} />
-    </div>
+    </React.Fragment>
   );
 }

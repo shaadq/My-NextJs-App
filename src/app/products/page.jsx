@@ -9,6 +9,7 @@ import { Card, Rate, Table } from "antd";
 import { useEffect, useState } from "react";
 import { Col, Row, Spinner } from "react-bootstrap";
 import ProductCard from "./ProductCard";
+import CustomSpinner from "@/components/common/custom-spinner/CustomSpinner";
 
 export default function Page() {
   const [products, setProducts] = useState([]);
@@ -90,9 +91,7 @@ export default function Page() {
       <div className="content-wrapper">
         {/* <Table columns={columns} dataSource={products} loading={loading} /> */}
         {loading ? (
-          <div className="h-100 d-flex align-items-center justify-content-center w-100">
-            <Spinner variant="success" />
-          </div>
+          <CustomSpinner />
         ) : (
           <Row md={5}>
             {products.map((item, index) => (
