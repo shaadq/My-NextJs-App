@@ -50,4 +50,9 @@ export const myServices = {
     const response = await axiosInstance.get(apiList.getProductCategories);
     return response.data;
   },
+
+  fetchAllUsers: async () => {
+    const response = await axiosInstance.get(apiList.getAllUsers);
+    return response.data.users;
+  },
 };

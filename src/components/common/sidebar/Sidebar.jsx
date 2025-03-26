@@ -1,12 +1,10 @@
 "use client";
-import "./Sidebar.scss";
-import Link from "next/link";
-import React from "react";
-import { usePathname } from "next/navigation";
-import { MdOutlineCategory, MdOutlineDashboard } from "react-icons/md";
-import { RiProfileLine } from "react-icons/ri";
-import { AiOutlineProduct, AiOutlineSetting } from "react-icons/ai";
 import { useAppContext } from "@/app/context/AppContext";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { AiOutlineProduct, AiOutlineSetting } from "react-icons/ai";
+import { MdOutlineCategory, MdOutlineDashboard } from "react-icons/md";
+import "./Sidebar.scss";
 
 const Sidebar = () => {
   const { toggle } = useAppContext();
@@ -16,7 +14,6 @@ const Sidebar = () => {
     { title: "Dashboard", link: "/dashboard", icon: <MdOutlineDashboard /> },
     { title: "Products", link: "/products", icon: <AiOutlineProduct /> },
     { title: "Categories", link: "/categories", icon: <MdOutlineCategory /> },
-    { title: "Profile", link: "/profile", icon: <RiProfileLine /> },
     { title: "Settings", link: "/settings", icon: <AiOutlineSetting /> },
   ];
 

@@ -3,6 +3,7 @@ export const apiList = {
   authorization: "/auth/me",
   getProducts: "/products",
   getProductCategories: "/products/categories",
+  getAllUsers: "/users",
 };
 
 export const enumList = {
@@ -32,6 +33,13 @@ export const enumList = {
         color: "#1B5E20", // Dark green for text
         background: "rgba(76, 175, 80, 0.15)", // Softer green
       },
+    },
+  },
+  userRoles: {
+    badges: {
+      admin: "success",
+      moderator: "primary",
+      user: "danger",
     },
   },
 };

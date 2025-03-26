@@ -7,6 +7,8 @@
     text-decoration: none;
     color: rgb(185, 185, 185);
     margin-bottom: -0.5px;
+    display: flex;
+    align-items: center;
   }
   .custom-tab-item.custom-tab-active {
     border-bottom: 3px solid #28a745;

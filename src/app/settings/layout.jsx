@@ -1,11 +1,12 @@
 "use client";
-import "./Settings.scss";
 import Header from "@/components/common/header/Header";
 import Logout from "@/components/common/logout/Logout";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AiOutlineProduct } from "react-icons/ai";
-import { MdOutlineCategory, MdOutlineDashboard } from "react-icons/md";
+import { IoDocumentAttachOutline } from "react-icons/io5";
+import { LiaUsersCogSolid } from "react-icons/lia";
+import { RiProfileLine } from "react-icons/ri";
+import "./Settings.scss";
 
 export default function SettingsLayout({ children }) {
   const pathname = usePathname();
@@ -13,17 +14,17 @@ export default function SettingsLayout({ children }) {
     {
       title: "User Management",
       link: "/settings/user-management",
-      icon: <MdOutlineDashboard />,
+      icon: <LiaUsersCogSolid />,
     },
     {
       title: "Documents",
       link: "/settings/document",
-      icon: <AiOutlineProduct />,
+      icon: <IoDocumentAttachOutline />,
     },
     {
       title: "Profile",
       link: "/settings/profile",
-      icon: <MdOutlineCategory />,
+      icon: <RiProfileLine />,
     },
   ];
 
@@ -41,13 +42,14 @@ export default function SettingsLayout({ children }) {
             <Link
               key={index}
               href={`${item.link}`}
-              className={`custom-tab-item me-3 pb-1 ${
+              className={`custom-tab-item me-4 pb-1  ${
                 pathname === item.link
                   ? "custom-tab-active text-success fw-semibold "
                   : ""
               }`}
             >
-              {item.title}
+              <span className="d-flex me-1">{item.icon}</span>
+              <span>{item.title}</span>
             </Link>
           ))}
         </div>
