@@ -14,6 +14,9 @@ export default function RootLayout({ children }) {
   if (pathname === "/login") {
     return (
       <html lang="en">
+        <head>
+          <link rel="icon" href="/favicon.svg" sizes="any" />
+        </head>
         <body>
           <PageTitle /> {/* Dynamically set the page title */}
           {children}
@@ -24,6 +27,9 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.svg" sizes="any" />
+      </head>
       <body>
         <PageTitle /> {/* Dynamically set the page title */}
         <ToastContainer
