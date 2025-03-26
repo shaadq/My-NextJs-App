@@ -53,7 +53,9 @@ const AddEditUser = ({ show, data, onClose, fetchAllUsers }) => {
       width={500}
       extra={
         <Space>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={onClose} variant="text">
+            Cancel
+          </Button>
           <Button onClick={handleSubmit} type="primary" disabled={loading}>
             <span>Submit</span>
             {loading ? <Spinner size="sm" /> : null}

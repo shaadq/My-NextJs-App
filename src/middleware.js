@@ -7,7 +7,13 @@ export function middleware(req) {
   const { pathname } = req.nextUrl;
 
   // Define protected routes
-  const protectedRoutes = ["/", "/dashboard", "/settings", "/profile"];
+  const protectedRoutes = [
+    "/",
+    "/dashboard",
+    "/products",
+    "/catergories",
+    "/settings",
+  ];
 
   // Check if the requested path is a protected route
   if (
@@ -22,5 +28,12 @@ export function middleware(req) {
 
 // Apply middleware to specific routes
 export const config = {
-  matcher: ["/", "/dashboard/:path*", "/settings", "/profile"], // Protecting these routes
+  matcher: [
+    "/",
+    "/dashboard/:path*",
+    "/products/:path*",
+    "/settings",
+    "/catergories",
+    "/settings/:path*",
+  ], // Protecting these routes
 };

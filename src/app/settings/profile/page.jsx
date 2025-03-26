@@ -30,7 +30,7 @@ export default function Profile() {
       {loading ? (
         <CustomSpinner />
       ) : (
-        <Row md={5}>
+        <Row md={4} className="">
           <Col className="mb-4">
             <div>
               <h6>First Name</h6>

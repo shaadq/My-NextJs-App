@@ -36,6 +36,7 @@ export default function UserManagement() {
       title: "Name",
       dataIndex: "",
       key: "firstName",
+      width: 150,
       render: (text, record) => (
         <div>{record.firstName + " " + record.lastName}</div>
       ),
@@ -44,6 +45,7 @@ export default function UserManagement() {
       title: "Username",
       dataIndex: "username",
       key: "username",
+      width: 120,
     },
     {
       title: "Email",
@@ -60,11 +62,13 @@ export default function UserManagement() {
       title: "Date of Birth",
       dataIndex: "birthDate",
       key: "birthDate",
+      width: 150,
     },
     {
       title: "Role",
       dataIndex: "role",
       key: "role",
+      width: 100,
       render: (item) => {
         return <Badge bg={`${enumList.userRoles.badges[item]}`}>{item}</Badge>;
       },
@@ -73,6 +77,7 @@ export default function UserManagement() {
       title: "Actions",
       dataIndex: "actions",
       key: "actions",
+      width: 100,
       render: (item, record) => {
         return (
           <div className="d-flex ms-3" onClick={() => handleEditClick(record)}>
@@ -83,9 +88,27 @@ export default function UserManagement() {
     },
   ];
 
+  console.log(users);
+
   return (
     <React.Fragment>
-      <Table columns={columns} dataSource={users} loading={loading} />
+      <Table
+        rowKey="id"
+        columns={columns}
+        dataSource={users}
+        expandable={{
+          expandedRowRender: (record) => (
+            <p className="mb-0 d-flex">
+              <div className="fw-semibold me-1">University :</div>
+              <div>{record?.university}</div>
+            </p>
+          ),
+          rowExpandable: (record) => record.university !== "Not Expandable",
+        }}
+        // pagination={{ pageSize: 20 }}
+        scroll={{ y: 100 * 5 }}
+        loading={loading}
+      />
       <AddEditUser
         show={drawerShow.show}
         data={drawerShow.data}
