@@ -118,7 +118,7 @@ export default function UserManagement() {
               type="primary"
               onClick={() => setDrawerShow({ show: true })}
             >
-              <AiOutlineUserAdd />
+              <AiOutlineUserAdd className="fs-5" />
               <span>Add User</span>
             </Button>
           </div>

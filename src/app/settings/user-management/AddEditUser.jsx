@@ -1,7 +1,7 @@
 "use client";
 import { userRoles } from "@/enum-list/enumList";
 import { myServices } from "@/service/json-service/service";
-import { Button, Drawer, Select, Space } from "antd";
+import { Button, Drawer, Input, Select, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { Col, Row, Spinner } from "react-bootstrap";
 import { toast } from "react-toastify";
@@ -87,9 +87,8 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
             <label htmlFor="" className="form-label fw-semibold">
               First Name
             </label>
-            <input
+            <Input
               type="text"
-              className="form-control"
               placeholder="First Name"
               value={formData?.firstName}
               onChange={(e) => handleChange("firstName", e.target.value)}
@@ -102,9 +101,8 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
             <label htmlFor="" className="form-label fw-semibold">
               Last Name
             </label>
-            <input
+            <Input
               type="text"
-              className="form-control"
               placeholder="Last Name"
               value={formData?.lastName}
               onChange={(e) => handleChange("lastName", e.target.value)}
@@ -117,9 +115,8 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
             <label htmlFor="" className="form-label fw-semibold">
               Email
             </label>
-            <input
+            <Input
               type="text"
-              className="form-control"
               placeholder="Email"
               value={formData?.email}
               onChange={(e) => handleChange("email", e.target.value)}
@@ -132,9 +129,8 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
             <label htmlFor="" className="form-label fw-semibold">
               Address
             </label>
-            <input
+            <Input
               type="text"
-              className="form-control"
               placeholder="Address"
               value={formData?.address}
               onChange={(e) => handleChange("address", e.target.value)}
@@ -147,9 +143,8 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
             <label htmlFor="" className="form-label fw-semibold">
               Username
             </label>
-            <input
+            <Input
               type="text"
-              className="form-control"
               placeholder="Username"
               value={formData?.username}
               onChange={(e) => handleChange("username", e.target.value)}
@@ -162,9 +157,8 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
             <label htmlFor="" className="form-label fw-semibold">
               Password
             </label>
-            <input
+            <Input
               type="text"
-              className="form-control"
               placeholder="Password"
               value={formData?.password}
               onChange={(e) => handleChange("password", e.target.value)}
@@ -177,23 +171,16 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
             <label htmlFor="" className="form-label fw-semibold">
               Role
             </label>
-            {/* <input
-              type="text"
-              className="form-control"
-              placeholder="Password"
-              value={formData?.password}
-              onChange={(e) => handleChange("password", e.target.value)}
-              disabled={loading}
-            /> */}
             <Select
-              showSearch
               className="w-100"
               placeholder="Select a person"
               optionFilterProp="label"
-              value={formData.role}
-              // onChange={onChange}
-              // onSearch={onSearch}
+              value={userRoles?.roles[formData.role]?.text}
+              onChange={(e) => {
+                handleChange("role", e);
+              }}
               options={userRoles.rolesDropdown}
+              disabled={loading}
             />
           </div>
         </Col>
