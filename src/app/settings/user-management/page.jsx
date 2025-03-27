@@ -113,7 +113,7 @@ export default function UserManagement() {
       ) : (
         <React.Fragment>
           <div className="d-flex justify-content-between align-items-center mb-4">
-            <h5 className="mb-0">Users</h5>
+            <h5 className="mb-0">{users.length} Users</h5>
             <Button
               type="primary"
               onClick={() => setDrawerShow({ show: true })}
@@ -137,7 +137,7 @@ export default function UserManagement() {
               rowExpandable: (record) => record.university !== "Not Expandable",
             }}
             // pagination={{ pageSize: 20 }}
-            scroll={{ y: 100 * 5 }}
+            // scroll={{ y: 100 * 5 }}
             loading={loading}
           />
         </React.Fragment>

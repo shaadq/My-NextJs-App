@@ -50,6 +50,20 @@ export const userRoles = {
     moderator: "primary",
     user: "danger",
   },
+  rolesDropdown: [
+    {
+      value: 1,
+      label: "admin",
+    },
+    {
+      value: 2,
+      label: "moderator",
+    },
+    {
+      value: 3,
+      label: "user",
+    },
+  ],
   roles: {
     1: {
       class: "success",

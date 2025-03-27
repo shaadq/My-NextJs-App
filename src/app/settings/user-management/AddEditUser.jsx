@@ -1,6 +1,7 @@
 "use client";
+import { userRoles } from "@/enum-list/enumList";
 import { myServices } from "@/service/json-service/service";
-import { Button, Drawer, Space } from "antd";
+import { Button, Drawer, Select, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { Col, Row, Spinner } from "react-bootstrap";
 import { toast } from "react-toastify";
@@ -50,6 +51,7 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
         username: data.username,
         password: data.password,
         address: data.address,
+        role: data.role,
       });
     } else {
       setFormData(initialValue);
@@ -167,6 +169,31 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
               value={formData?.password}
               onChange={(e) => handleChange("password", e.target.value)}
               disabled={loading}
+            />
+          </div>
+        </Col>
+        <Col>
+          <div className="mb-3">
+            <label htmlFor="" className="form-label fw-semibold">
+              Role
+            </label>
+            {/* <input
+              type="text"
+              className="form-control"
+              placeholder="Password"
+              value={formData?.password}
+              onChange={(e) => handleChange("password", e.target.value)}
+              disabled={loading}
+            /> */}
+            <Select
+              showSearch
+              className="w-100"
+              placeholder="Select a person"
+              optionFilterProp="label"
+              value={formData.role}
+              // onChange={onChange}
+              // onSearch={onSearch}
+              options={userRoles.rolesDropdown}
             />
           </div>
         </Col>
