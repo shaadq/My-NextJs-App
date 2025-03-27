@@ -38,7 +38,7 @@ const Login = () => {
         </div>
       </Col>
       <Col md={6}>
-        <div className="h-100vh h-100vh d-flex flex-column justify-content-center">
+        <div className="vh-100 d-flex flex-column justify-content-center">
           <h2 className="text-center mb-5 ">Login</h2>
           <Row className="justify-content-center">
             <Col md={6}>
@@ -85,7 +85,7 @@ const Login = () => {
       </Col>
     </Row>
     // <div className="container">
-    //   <div className="h-100vh h-100vh d-flex flex-column justify-content-center">
+    //   <div className="vh-100 d-flex flex-column justify-content-center">
     //     <h1 className="text-center mb-5">Welcome to My NextJS App.</h1>
     //     <Row className="justify-content-center">
     //       <Col md={4}>

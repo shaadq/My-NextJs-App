@@ -1,6 +1,7 @@
 import { apiList } from "@/enum-list/enumList";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import supabaseAxiosInstance from "../axios-service/axios-supabase";
 
 const { default: axiosInstance } = require("../axios-service/axiosInstance");
 
@@ -51,22 +52,53 @@ export const myServices = {
     return response.data;
   },
 
-  fetchAllUsers: async () => {
-    const response = await axiosInstance.get(apiList.getAllUsers);
-    return response.data.users;
-  },
+  // fetchAllUsers: async () => {
+  //   const response = await axiosInstance.get(apiList.getAllUsers);
+  //   return response.data.users;
+  // },
 
   fetchSingleUser: async (id) => {
     const response = await axiosInstance.get(apiList.getAllUsers + `/${id}`);
     return response.data;
   },
 
-  updateUser: async (id, data) => {
-    const response = await axiosInstance.put(
-      apiList.getAllUsers + `/${id}`,
-      data
-    );
+  // updateUser: async (id, data) => {
+  //   const response = await axiosInstance.put(
+  //     apiList.getAllUsers + `/${id}`,
+  //     data
+  //   );
+  // },
 
-    console.log(response);
+  fetchAllUsers: async () => {
+    try {
+      const response = await supabaseAxiosInstance.get("/users/getUsers");
+      return response.data;
+    } catch (error) {
+      console.error("Failed to fetch users from Supabase:", error);
+      return [];
+    }
+  },
+
+  addUser: async (userData) => {
+    try {
+      const response = await axiosInstance.post("/users/addUser", userData);
+      return response.data;
+    } catch (error) {
+      console.error("Error adding user:", error);
+      throw error;
+    }
+  },
+
+  updateUser: async (id, data) => {
+    try {
+      const response = await supabaseAxiosInstance.put("/users/updateUser", {
+        id,
+        data,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error updating user:", error);
+      throw error;
+    }
   },
 };

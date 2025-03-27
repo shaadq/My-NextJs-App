@@ -1,31 +1,17 @@
 "use client";
+import CustomSpinner from "@/components/common/custom-spinner/CustomSpinner";
 import { enumList } from "@/enum-list/enumList";
 import { myServices } from "@/service/json-service/service";
 import { Table } from "antd";
 import React, { useEffect, useState } from "react";
-import { Badge, Button } from "react-bootstrap";
-import AddEditUser from "./AddEditUser";
+import { Badge } from "react-bootstrap";
 import { FaRegEdit } from "react-icons/fa";
+import AddEditUser from "./AddEditUser";
 
 export default function UserManagement() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [drawerShow, setDrawerShow] = useState({ show: false, data: {} });
-
-  useEffect(() => {
-    fetchAllUsers();
-  }, []);
-
-  const fetchAllUsers = async () => {
-    setLoading(true);
-    try {
-      const data = await myServices.fetchAllUsers();
-      setUsers(data);
-    } catch (error) {
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleEditClick = (record) => {
     setDrawerShow((prev) => ({ ...prev, show: true, data: record }));
@@ -51,17 +37,19 @@ export default function UserManagement() {
       title: "Email",
       dataIndex: "email",
       key: "email",
+      width: 250,
     },
+    // {
+    //   title: "Company",
+    //   dataIndex: "company",
+    //   key: "company",
+    //   render: (text) => <div>{text?.name}</div>,
+    //   width: 150,
+    // },
     {
-      title: "Company",
-      dataIndex: "company",
-      key: "company",
-      render: (text) => <div>{text.name}</div>,
-    },
-    {
-      title: "Date of Birth",
-      dataIndex: "birthDate",
-      key: "birthDate",
+      title: "Address",
+      dataIndex: "address",
+      key: "address",
       width: 150,
     },
     {
@@ -88,34 +76,52 @@ export default function UserManagement() {
     },
   ];
 
-  console.log(users);
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const data = await myServices.fetchAllUsers();
+      setUsers(data);
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   return (
     <React.Fragment>
-      <Table
-        rowKey="id"
-        columns={columns}
-        dataSource={users}
-        expandable={{
-          expandedRowRender: (record) => (
-            <p className="mb-0 d-flex">
-              <div className="fw-semibold me-1">University :</div>
-              <div>{record?.university}</div>
-            </p>
-          ),
-          rowExpandable: (record) => record.university !== "Not Expandable",
-        }}
-        // pagination={{ pageSize: 20 }}
-        scroll={{ y: 100 * 5 }}
-        loading={loading}
-      />
+      {loading ? (
+        <CustomSpinner />
+      ) : (
+        <Table
+          rowKey="id"
+          columns={columns}
+          dataSource={users}
+          expandable={{
+            expandedRowRender: (record) => (
+              <p className="mb-0 d-flex">
+                <span className="fw-semibold me-1">University :</span>
+                <span>{record?.university}</span>
+              </p>
+            ),
+            rowExpandable: (record) => record.university !== "Not Expandable",
+          }}
+          // pagination={{ pageSize: 20 }}
+          scroll={{ y: 100 * 5 }}
+          loading={loading}
+        />
+      )}
+
       <AddEditUser
         show={drawerShow.show}
         data={drawerShow.data}
         onClose={() => {
           setDrawerShow((prev) => ({ ...prev, show: false }));
         }}
-        fetchAllUsers={() => fetchAllUsers()}
+        fetchAllUsers={() => fetchUsers()}
       />
     </React.Fragment>
   );
