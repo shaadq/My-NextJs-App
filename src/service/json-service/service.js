@@ -81,7 +81,10 @@ export const myServices = {
 
   addUser: async (userData) => {
     try {
-      const response = await axiosInstance.post("/users/addUser", userData);
+      const response = await supabaseAxiosInstance.post(
+        "/users/addUser",
+        userData
+      );
       return response.data;
     } catch (error) {
       console.error("Error adding user:", error);
@@ -98,6 +101,19 @@ export const myServices = {
       return response.data;
     } catch (error) {
       console.error("Error updating user:", error);
+      throw error;
+    }
+  },
+
+  deleteUser: async (id) => {
+    try {
+      console.log("service:", id);
+      const response = await supabaseAxiosInstance.delete("/users/deleteUser", {
+        data: { id },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting user:", error);
       throw error;
     }
   },

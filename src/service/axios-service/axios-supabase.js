@@ -1,7 +1,7 @@
 const { default: axios } = require("axios");
 
 const supabaseAxiosInstance = axios.create({
-  baseURL: "/api", // Calls your Next.js API routes
+  baseURL: "/api",
   headers: {
     Accept: "application/json",
   },

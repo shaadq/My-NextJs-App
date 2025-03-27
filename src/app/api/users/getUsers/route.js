@@ -7,7 +7,10 @@ export async function GET() {
     process.env.SUPABASE_SERVICE_ROLE_KEY
   );
 
-  const { data, error } = await supabase.from("users").select("*");
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .order("created_at", { ascending: false }); // Sorting by created_at in descending order;
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 400 });

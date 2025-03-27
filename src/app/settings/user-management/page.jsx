@@ -1,20 +1,27 @@
 "use client";
 import CustomSpinner from "@/components/common/custom-spinner/CustomSpinner";
-import { enumList } from "@/enum-list/enumList";
+import { enumList, userRoles } from "@/enum-list/enumList";
 import { myServices } from "@/service/json-service/service";
-import { Table } from "antd";
+import { Button, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { Badge } from "react-bootstrap";
 import { FaRegEdit } from "react-icons/fa";
 import AddEditUser from "./AddEditUser";
+import { AiOutlineUserAdd } from "react-icons/ai";
+import { MdDeleteOutline } from "react-icons/md";
+import ConfirmDeleteModal from "./ConfirmDeleteModal";
 
 export default function UserManagement() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [drawerShow, setDrawerShow] = useState({ show: false, data: {} });
+  const [confirmDelete, setConfirmDelete] = useState({
+    show: false,
+    name: null,
+  });
 
   const handleEditClick = (record) => {
-    setDrawerShow((prev) => ({ ...prev, show: true, data: record }));
+    setDrawerShow({ show: true, data: record });
   };
 
   const columns = [
@@ -39,13 +46,7 @@ export default function UserManagement() {
       key: "email",
       width: 250,
     },
-    // {
-    //   title: "Company",
-    //   dataIndex: "company",
-    //   key: "company",
-    //   render: (text) => <div>{text?.name}</div>,
-    //   width: 150,
-    // },
+
     {
       title: "Address",
       dataIndex: "address",
@@ -58,18 +59,32 @@ export default function UserManagement() {
       key: "role",
       width: 100,
       render: (item) => {
-        return <Badge bg={`${enumList.userRoles.badges[item]}`}>{item}</Badge>;
+        return (
+          <Badge bg={`${userRoles?.roles[item]?.class}`}>
+            {userRoles?.roles[item]?.text}
+          </Badge>
+        );
       },
     },
     {
       title: "Actions",
       dataIndex: "actions",
       key: "actions",
-      width: 100,
+      width: 70,
       render: (item, record) => {
+        const name = record.firstName + " " + record.lastName;
         return (
-          <div className="d-flex ms-3" onClick={() => handleEditClick(record)}>
-            <FaRegEdit className="fs-5 text-secondary cursor-pointer" />
+          <div className="d-flex align-itemc-center">
+            <div onClick={() => handleEditClick(record)}>
+              <FaRegEdit className="fs-5 text-secondary cursor-pointer" />
+            </div>
+            <div
+              onClick={() =>
+                setConfirmDelete({ show: true, name: name, id: record.id })
+              }
+            >
+              <MdDeleteOutline className="fs-4 ms-2 text-secondary cursor-pointer" />
+            </div>
           </div>
         );
       },
@@ -96,32 +111,55 @@ export default function UserManagement() {
       {loading ? (
         <CustomSpinner />
       ) : (
-        <Table
-          rowKey="id"
-          columns={columns}
-          dataSource={users}
-          expandable={{
-            expandedRowRender: (record) => (
-              <p className="mb-0 d-flex">
-                <span className="fw-semibold me-1">University :</span>
-                <span>{record?.university}</span>
-              </p>
-            ),
-            rowExpandable: (record) => record.university !== "Not Expandable",
-          }}
-          // pagination={{ pageSize: 20 }}
-          scroll={{ y: 100 * 5 }}
-          loading={loading}
-        />
+        <React.Fragment>
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <h5 className="mb-0">Users</h5>
+            <Button
+              type="primary"
+              onClick={() => setDrawerShow({ show: true })}
+            >
+              <AiOutlineUserAdd />
+              <span>Add User</span>
+            </Button>
+          </div>
+          <Table
+            rowKey="id"
+            size="small"
+            columns={columns}
+            dataSource={users}
+            expandable={{
+              expandedRowRender: (record) => (
+                <p className="mb-0 d-flex">
+                  <span className="fw-semibold me-1">Password :</span>
+                  <span>{record?.password}</span>
+                </p>
+              ),
+              rowExpandable: (record) => record.university !== "Not Expandable",
+            }}
+            // pagination={{ pageSize: 20 }}
+            scroll={{ y: 100 * 5 }}
+            loading={loading}
+          />
+        </React.Fragment>
       )}
 
       <AddEditUser
         show={drawerShow.show}
         data={drawerShow.data}
         onClose={() => {
-          setDrawerShow((prev) => ({ ...prev, show: false }));
+          setDrawerShow({ show: false, data: null });
         }}
-        fetchAllUsers={() => fetchUsers()}
+        setUsers={setUsers}
+      />
+
+      <ConfirmDeleteModal
+        show={confirmDelete.show}
+        name={confirmDelete.name}
+        id={confirmDelete.id}
+        setUsers={setUsers}
+        onClose={() => {
+          setConfirmDelete({ show: false });
+        }}
       />
     </React.Fragment>
   );

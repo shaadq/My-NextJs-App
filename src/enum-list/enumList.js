@@ -44,6 +44,28 @@ export const enumList = {
   },
 };
 
+export const userRoles = {
+  badges: {
+    admin: "success",
+    moderator: "primary",
+    user: "danger",
+  },
+  roles: {
+    1: {
+      class: "success",
+      text: "admin",
+    },
+    2: {
+      class: "primary",
+      text: "moderator",
+    },
+    3: {
+      class: "danger",
+      text: "user",
+    },
+  },
+};
+
 export const pageTitleList = {
   titles: {
     login: "Next App - Login",

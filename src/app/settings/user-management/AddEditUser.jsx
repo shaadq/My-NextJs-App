@@ -5,13 +5,14 @@ import React, { useEffect, useState } from "react";
 import { Col, Row, Spinner } from "react-bootstrap";
 import { toast } from "react-toastify";
 
-const AddEditUser = ({ show, data, onClose, fetchAllUsers }) => {
+const AddEditUser = ({ show, data, onClose, setUsers }) => {
   const initialValue = {
     firstName: "",
     lastName: "",
     username: "",
     password: "",
     email: "",
+    address: "",
   };
   const [formData, setFormData] = useState(initialValue);
   const [loading, setLoading] = useState(false);
@@ -22,14 +23,21 @@ const AddEditUser = ({ show, data, onClose, fetchAllUsers }) => {
 
   const handleSubmit = async () => {
     setLoading(true);
+
     try {
-      const response = await myServices.updateUser(data.id, formData);
+      if (data) {
+        const response = await myServices.updateUser(data.id, formData);
+      } else {
+        const response = await myServices.addUser(formData);
+      }
     } catch (error) {
     } finally {
-      toast.info("User Info Updated!");
-      await fetchAllUsers();
-      setLoading(false);
       onClose();
+      const data = await myServices.fetchAllUsers();
+      setUsers(data);
+      setLoading(false);
+      toast.info(`${data ? "User info updated!" : "New user added!"}`);
+      setFormData(initialValue);
     }
   };
 
@@ -38,26 +46,34 @@ const AddEditUser = ({ show, data, onClose, fetchAllUsers }) => {
       setFormData({
         firstName: data.firstName,
         lastName: data.lastName,
+        email: data.email,
         username: data.username,
         password: data.password,
-        email: data.email,
+        address: data.address,
       });
+    } else {
+      setFormData(initialValue);
     }
   }, [data]);
 
+  const handleClose = () => {
+    onClose();
+    setFormData(initialValue);
+  };
+
   return (
     <Drawer
-      title="Edit User Info"
-      onClose={onClose}
+      title={`${data ? "Edit User" : "Add User"}`}
+      onClose={handleClose}
       open={show}
       width={500}
       extra={
         <Space>
-          <Button onClick={onClose} variant="text">
+          <Button onClick={handleClose} variant="text">
             Cancel
           </Button>
           <Button onClick={handleSubmit} type="primary" disabled={loading}>
-            <span>Submit</span>
+            <span>{data ? "Update" : "Add"}</span>
             {loading ? <Spinner size="sm" /> : null}
           </Button>
         </Space>
@@ -72,6 +88,7 @@ const AddEditUser = ({ show, data, onClose, fetchAllUsers }) => {
             <input
               type="text"
               className="form-control"
+              placeholder="First Name"
               value={formData?.firstName}
               onChange={(e) => handleChange("firstName", e.target.value)}
               disabled={loading}
@@ -86,8 +103,39 @@ const AddEditUser = ({ show, data, onClose, fetchAllUsers }) => {
             <input
               type="text"
               className="form-control"
+              placeholder="Last Name"
               value={formData?.lastName}
               onChange={(e) => handleChange("lastName", e.target.value)}
+              disabled={loading}
+            />
+          </div>
+        </Col>
+        <Col>
+          <div className="mb-3">
+            <label htmlFor="" className="form-label fw-semibold">
+              Email
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Email"
+              value={formData?.email}
+              onChange={(e) => handleChange("email", e.target.value)}
+              disabled={loading}
+            />
+          </div>
+        </Col>
+        <Col>
+          <div className="mb-3">
+            <label htmlFor="" className="form-label fw-semibold">
+              Address
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Address"
+              value={formData?.address}
+              onChange={(e) => handleChange("address", e.target.value)}
               disabled={loading}
             />
           </div>
@@ -100,6 +148,7 @@ const AddEditUser = ({ show, data, onClose, fetchAllUsers }) => {
             <input
               type="text"
               className="form-control"
+              placeholder="Username"
               value={formData?.username}
               onChange={(e) => handleChange("username", e.target.value)}
               disabled={loading}
@@ -114,22 +163,9 @@ const AddEditUser = ({ show, data, onClose, fetchAllUsers }) => {
             <input
               type="text"
               className="form-control"
+              placeholder="Password"
               value={formData?.password}
               onChange={(e) => handleChange("password", e.target.value)}
-              disabled={loading}
-            />
-          </div>
-        </Col>
-        <Col md={12}>
-          <div className="mb-3">
-            <label htmlFor="" className="form-label fw-semibold">
-              Email
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              value={formData?.email}
-              onChange={(e) => handleChange("email", e.target.value)}
               disabled={loading}
             />
           </div>
