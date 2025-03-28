@@ -1,8 +1,7 @@
 "use client";
 import { loginService } from "@/service/json-service/login-service";
-import { myServices } from "@/service/json-service/service";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button, Col, Form, Row, Spinner } from "react-bootstrap";
 import { toast } from "react-toastify";
 
@@ -25,6 +24,7 @@ const Login = () => {
 
       if (response === 200) {
         router.push("/dashboard");
+        toast.success("Login successful");
       }
     } finally {
       setLoading(false);

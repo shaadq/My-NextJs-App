@@ -10,7 +10,6 @@ export const loginService = {
       if (response.status === 200) {
         Cookies.set("token", response.data.accessToken, { expires: 7 });
         Cookies.set("user", JSON.stringify(response.data.user), { expires: 7 }); // Stringify user object
-        toast.success("Login successful");
         return response.status;
       } else {
         toast.error(response.data.message);
