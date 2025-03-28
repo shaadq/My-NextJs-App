@@ -1,0 +1,34 @@
+.users-wrapper {
+  width: 100%;
+  height: calc(100% - 35px);
+  display: flex;
+  overflow-x: hidden;
+  align-items: start;
+  .users-left-wrapper {
+    width: 100%;
+    transition: 0.3s;
+  }
+  .users-left-wrapper.shrinked {
+    width: calc(100% - 400px);
+  }
+  .users-right-wrapper {
+    width: 400px;
+    margin-right: -400px;
+    transition: 0.3s;
+  }
+  .users-right-wrapper.info-show {
+    // margin-right: 300px;
+  }
+  .user-profile-wrapper {
+    display: flex;
+    flex-direction: column;
+    .user-profile-item {
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+       label {
+        margin-bottom: 3px
+       }
+    }
+  }
+}

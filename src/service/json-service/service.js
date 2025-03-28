@@ -2,6 +2,7 @@ import { apiList } from "@/enum-list/enumList";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import supabaseAxiosInstance from "../axios-service/axios-supabase";
+import { userProfilesService } from "./userProfilesService";
 
 const { default: axiosInstance } = require("../axios-service/axiosInstance");
 
@@ -9,7 +10,6 @@ export const myServices = {
   getToken: async (obj) => {
     try {
       const response = await axiosInstance.post(apiList.getToken, obj);
-
       if (response?.data?.accessToken) {
         Cookies.set("token", response.data.accessToken, { expires: 1 });
         const userInfo = await myServices.authenticate();
@@ -52,23 +52,12 @@ export const myServices = {
     return response.data;
   },
 
-  // fetchAllUsers: async () => {
-  //   const response = await axiosInstance.get(apiList.getAllUsers);
-  //   return response.data.users;
-  // },
-
   fetchSingleUser: async (id) => {
     const response = await axiosInstance.get(apiList.getAllUsers + `/${id}`);
     return response.data;
   },
 
-  // updateUser: async (id, data) => {
-  //   const response = await axiosInstance.put(
-  //     apiList.getAllUsers + `/${id}`,
-  //     data
-  //   );
-  // },
-
+  // SupaBase
   fetchAllUsers: async () => {
     try {
       const response = await supabaseAxiosInstance.get("/users/getUsers");
@@ -112,6 +101,7 @@ export const myServices = {
       const response = await supabaseAxiosInstance.delete("/users/deleteUser", {
         data: { id },
       });
+      await userProfilesService.deleteUserProfile(id);
       return response.data;
     } catch (error) {
       console.error("Error deleting user:", error);

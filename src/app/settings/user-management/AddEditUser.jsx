@@ -1,6 +1,8 @@
 "use client";
+import CustomSpinner from "@/components/common/custom-spinner/CustomSpinner";
 import { userRoles } from "@/enum-list/enumList";
 import { myServices } from "@/service/json-service/service";
+import { userProfilesService } from "@/service/json-service/userProfilesService";
 import { Button, Drawer, Input, Select, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { Col, Row, Spinner } from "react-bootstrap";
@@ -12,9 +14,12 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
     password: "",
     email: "",
     role: null,
+    contact: "",
+    location: "",
   };
+
   const [formData, setFormData] = useState(initialValue);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState({ button: false, page: false });
   const [errors, setErrors] = useState({});
 
   const handleChange = (name, value) => {
@@ -45,37 +50,74 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
   const handleSubmit = async () => {
     if (!validateForm()) return; // Stop execution if validation fails
 
-    setLoading(true);
+    setLoading((prev) => ({ ...prev, button: true }));
     try {
+      const user_Payload = {
+        name: formData.name,
+        password: formData.password,
+        email: formData.email,
+        role: formData.role,
+      };
+      const userProfile_Payload1 = {
+        location: formData.location,
+        contact: formData.contact,
+      };
+
       if (data) {
-        await myServices.updateUser(data.id, formData);
+        await myServices.updateUser(data.id, user_Payload);
+        await userProfilesService.updateUserProfile(
+          // formData.userprofile_id,
+          data.id,
+          userProfile_Payload1
+        );
       } else {
-        await myServices.addUser(formData, setErrors);
+        const response = await myServices.addUser(user_Payload, setErrors);
+        const userProfile_Payload = {
+          location: formData.location,
+          contact: formData.contact,
+          user_id: response?.user?.id,
+        };
+        await userProfilesService.addUserProfile(userProfile_Payload);
       }
 
       onClose();
       const users = await myServices.fetchAllUsers();
+      toast.info(`${data ? "User info updated!" : "New user added!"}`);
       setUsers(users);
       setFormData(initialValue);
-      toast.info(`${data ? "User info updated!" : "New user added!"}`);
     } catch (error) {
       console.error("Error:", error);
     } finally {
-      setLoading(false); // Ensure loading state resets even if there's an error
+      setLoading((prev) => ({ ...prev, button: false }));
+    }
+  };
+
+  const initialFunction = async () => {
+    setLoading((prev) => ({ ...prev, page: true }));
+    try {
+      if (data) {
+        const userProfileData =
+          await userProfilesService.getUserProfileByUserId(data.id);
+        setFormData({
+          name: data.name,
+          email: data.email,
+          password: data.password,
+          role: data.role,
+          userprofile_id: userProfileData.id,
+          location: userProfileData.location,
+          contact: userProfileData.contact,
+        });
+      } else {
+        setFormData(initialValue);
+      }
+    } catch (error) {
+    } finally {
+      setLoading((prev) => ({ ...prev, page: false }));
     }
   };
 
   useEffect(() => {
-    if (data) {
-      setFormData({
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        role: data.role,
-      });
-    } else {
-      setFormData(initialValue);
-    }
+    initialFunction();
   }, [data]);
 
   const handleClose = () => {
@@ -94,86 +136,130 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
       width={500}
       extra={
         <Space>
-          <Button onClick={handleClose} variant="text" disabled={loading}>
+          <Button
+            onClick={handleClose}
+            variant="text"
+            disabled={loading.button || loading.page}
+          >
             Cancel
           </Button>
-          <Button onClick={handleSubmit} type="primary" disabled={loading}>
+          <Button
+            onClick={handleSubmit}
+            type="primary"
+            disabled={loading.button || loading.page}
+          >
             <span>{data ? "Update" : "Add"}</span>
-            {loading ? <Spinner size="sm" /> : null}
+            {loading.button ? <Spinner size="sm" /> : null}
           </Button>
         </Space>
       }
     >
-      <Row md={2} className="w-100">
-        <Col>
-          <div className="mb-3">
-            <label htmlFor="" className="form-label fw-semibold">
-              Name
-            </label>
-            <Input
-              type="text"
-              placeholder="First Name"
-              status={`${errors.name ? "error" : ""}`}
-              value={formData?.name}
-              onChange={(e) => handleChange("name", e.target.value)}
-              disabled={loading}
-            />
-            <div className="text-danger">{errors.name}</div>
-          </div>
-        </Col>
-        <Col>
-          <div className="mb-3">
-            <label htmlFor="" className="form-label fw-semibold">
-              Email
-            </label>
-            <Input
-              type="text"
-              placeholder="Email"
-              status={`${errors.email ? "error" : ""}`}
-              value={formData?.email}
-              onChange={(e) => handleChange("email", e.target.value)}
-              disabled={loading}
-            />
-            <div className="text-danger">{errors.email}</div>
-          </div>
-        </Col>
-        <Col>
-          <div className="mb-3">
-            <label htmlFor="" className="form-label fw-semibold">
-              Password
-            </label>
-            <Input
-              type="text"
-              placeholder="Password"
-              status={`${errors.password ? "error" : ""}`}
-              value={formData?.password}
-              onChange={(e) => handleChange("password", e.target.value)}
-              disabled={loading}
-            />
-            <div className="text-danger">{errors.password}</div>
-          </div>
-        </Col>
-        <Col>
-          <div className="mb-3">
-            <label htmlFor="" className="form-label fw-semibold">
-              Role
-            </label>
-            <Select
-              className="w-100"
-              placeholder="Select a person"
-              status={`${errors.role ? "error" : ""}`}
-              optionFilterProp="label"
-              value={userRoles?.roles[formData.role]?.text}
-              onChange={(e) => {
-                handleChange("role", e + "");
-              }}
-              options={userRoles.rolesDropdown}
-              disabled={loading}
-            />
-            <div className="text-danger">{errors.role}</div>
-          </div>
-        </Col>
-      </Row>
+      {loading.page ? (
+        <CustomSpinner />
+      ) : (
+        <Row md={2} className="w-100">
+          <Col>
+            <div className="mb-3">
+              <label htmlFor="" className="form-label fw-semibold">
+                Name
+              </label>
+              <Input
+                type="text"
+                placeholder="First Name"
+                status={`${errors.name ? "error" : ""}`}
+                value={formData?.name}
+                onChange={(e) => handleChange("name", e.target.value)}
+                disabled={loading.button}
+              />
+              <div className="text-danger">{errors.name}</div>
+            </div>
+          </Col>
+          <Col>
+            <div className="mb-3">
+              <label htmlFor="" className="form-label fw-semibold">
+                Email
+              </label>
+              <Input
+                type="text"
+                placeholder="Email"
+                status={`${errors.email ? "error" : ""}`}
+                value={formData?.email}
+                onChange={(e) => handleChange("email", e.target.value)}
+                disabled={loading.button || data}
+              />
+              <div className="text-danger">{errors.email}</div>
+            </div>
+          </Col>
+          <Col>
+            <div className="mb-3">
+              <label htmlFor="" className="form-label fw-semibold">
+                Password
+              </label>
+              <Input
+                type="text"
+                placeholder="Password"
+                status={`${errors.password ? "error" : ""}`}
+                value={formData?.password}
+                onChange={(e) => handleChange("password", e.target.value)}
+                disabled={loading.button}
+              />
+              <div className="text-danger">{errors.password}</div>
+            </div>
+          </Col>
+          <Col>
+            <div className="mb-3">
+              <label htmlFor="" className="form-label fw-semibold">
+                Role
+              </label>
+              <Select
+                className="w-100"
+                placeholder="Select a person"
+                status={`${errors.role ? "error" : ""}`}
+                optionFilterProp="label"
+                value={userRoles?.roles[formData.role]?.text}
+                onChange={(e) => {
+                  handleChange("role", e + "");
+                }}
+                options={userRoles.rolesDropdown}
+                disabled={loading.button}
+              />
+              <div className="text-danger">{errors.role}</div>
+            </div>
+          </Col>
+          <Col>
+            <div className="mb-3">
+              <label htmlFor="" className="form-label fw-semibold">
+                Contact
+              </label>
+              <Input
+                type="text"
+                placeholder="Password"
+                status={`${errors.contact ? "error" : ""}`}
+                value={formData?.contact}
+                onChange={(e) => handleChange("contact", e.target.value)}
+                disabled={loading.button}
+              />
+              <div className="text-danger">{errors.contact}</div>
+            </div>
+          </Col>
+          <Col>
+            <div className="mb-3">
+              <label htmlFor="" className="form-label fw-semibold">
+                Location
+              </label>
+              <Input
+                type="text"
+                placeholder="Password"
+                status={`${errors.location ? "error" : ""}`}
+                value={formData?.location}
+                onChange={(e) => handleChange("location", e.target.value)}
+                disabled={loading.button}
+              />
+              <div className="text-danger">{errors.location}</div>
+            </div>
+          </Col>
+        </Row>
+      )}
     </Drawer>
   );
 };

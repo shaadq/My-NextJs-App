@@ -17,7 +17,7 @@ const ConfirmDeleteModal = ({ show, name, id, setUsers, onClose }) => {
       const data = await myServices.fetchAllUsers();
       setUsers(data);
       setLoading(false);
-      toast.error(`Removed ${name}?`);
+      toast.error(`Removed ${name}`);
     }
   };
 
