@@ -1,33 +1,39 @@
+import supabaseAdmin from "@/components/lib/supabaseAdmin";
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
 
 export async function POST(req) {
   try {
-    const userData = await req.json(); // Get user data from request body
+    const { email, password, role, name } = await req.json(); // Get user data
 
-    if (!userData) {
-      return NextResponse.json(
-        { error: "User data is required" },
-        { status: 400 }
-      );
+    // ✅ Create user in Supabase Auth and confirm email automatically
+    const { data: user, error: authError } =
+      await supabaseAdmin.auth.admin.createUser({
+        email,
+        password,
+        email_confirm: true, // ✅ Mark user as confirmed
+      });
+
+    if (authError) {
+      return NextResponse.json({ error: authError.message }, { status: 400 });
     }
 
-    const { data, error } = await supabase.from("users").insert([userData]); // Insert user data
+    // ✅ Insert user details in "users" table
+    const { data: userData, error: userError } = await supabaseAdmin
+      .from("users")
+      .insert([{ id: user.user.id, email, role, name, password }]); // Storing role in the table
 
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 400 });
+    if (userError) {
+      return NextResponse.json({ error: userError.message }, { status: 400 });
     }
 
     return NextResponse.json({
-      message: "User added successfully",
-      user: data,
+      message: "User registered successfully",
+      user: user.user,
     });
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }

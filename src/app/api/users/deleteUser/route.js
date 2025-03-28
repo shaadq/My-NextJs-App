@@ -1,9 +1,5 @@
+import supabaseAdmin from "@/components/lib/supabaseAdmin";
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 export async function DELETE(request) {
   try {
@@ -17,17 +13,37 @@ export async function DELETE(request) {
       );
     }
 
-    const { error } = await supabase.from("users").delete().eq("id", id);
+    // ✅ Step 1: Delete from Supabase Auth
+    const { error: authError } = await supabaseAdmin.auth.admin.deleteUser(id);
 
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+    if (authError) {
+      return NextResponse.json(
+        { error: `Failed to delete from auth: ${authError.message}` },
+        { status: 500 }
+      );
+    }
+
+    // ✅ Step 2: Delete from "users" table
+    const { error: userError } = await supabaseAdmin
+      .from("users")
+      .delete()
+      .eq("id", id);
+
+    if (userError) {
+      return NextResponse.json(
+        { error: `Failed to delete from users table: ${userError.message}` },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json(
-      { message: "User deleted successfully" },
+      { message: "User deleted successfully from Auth and Users table" },
       { status: 200 }
     );
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { error: `Server error: ${error.message}` },
+      { status: 500 }
+    );
   }
 }

@@ -4,12 +4,13 @@ import { enumList, userRoles } from "@/enum-list/enumList";
 import { myServices } from "@/service/json-service/service";
 import { Button, Table } from "antd";
 import React, { useEffect, useState } from "react";
-import { Badge } from "react-bootstrap";
+import { Badge, Col, Row } from "react-bootstrap";
 import { FaRegEdit } from "react-icons/fa";
 import AddEditUser from "./AddEditUser";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
+import { formatDate } from "@/components/utils/utils";
 
 export default function UserManagement() {
   const [users, setUsers] = useState([]);
@@ -26,32 +27,24 @@ export default function UserManagement() {
 
   const columns = [
     {
-      title: "Name",
-      dataIndex: "",
-      key: "firstName",
-      width: 150,
-      render: (text, record) => (
-        <div>{record.firstName + " " + record.lastName}</div>
-      ),
+      title: "Created At",
+      dataIndex: "created_at",
+      key: "name",
+      width: 100,
+      render: (item) => formatDate(item),
     },
     {
-      title: "Username",
-      dataIndex: "username",
-      key: "username",
-      width: 120,
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+      width: 150,
     },
+
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
       width: 250,
-    },
-
-    {
-      title: "Address",
-      dataIndex: "address",
-      key: "address",
-      width: 150,
     },
     {
       title: "Role",
@@ -72,7 +65,7 @@ export default function UserManagement() {
       key: "actions",
       width: 70,
       render: (item, record) => {
-        const name = record.firstName + " " + record.lastName;
+        const name = record.name;
         return (
           <div className="d-flex align-itemc-center">
             <div onClick={() => handleEditClick(record)}>
@@ -122,6 +115,7 @@ export default function UserManagement() {
               <span>Add User</span>
             </Button>
           </div>
+
           <Table
             rowKey="id"
             size="small"

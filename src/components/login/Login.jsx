@@ -1,4 +1,5 @@
 "use client";
+import { loginService } from "@/service/json-service/login-service";
 import { myServices } from "@/service/json-service/service";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -9,8 +10,8 @@ const Login = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    username: "emilys",
-    password: "emilyspass",
+    email: "admin@admin.com",
+    password: "admin@123",
   });
 
   const handleChange = (name, value) => {
@@ -20,8 +21,9 @@ const Login = () => {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const response = await myServices.getToken(formData);
-      if (response) {
+      const response = await loginService.getToken(formData);
+
+      if (response === 200) {
         router.push("/dashboard");
       }
     } finally {
@@ -44,11 +46,11 @@ const Login = () => {
             <Col md={6}>
               <Form>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label className="fw-semibold">Username</Form.Label>
+                  <Form.Label className="fw-semibold">Email</Form.Label>
                   <Form.Control
                     placeholder="Enter email"
-                    value={formData.username}
-                    onChange={(e) => handleChange("username", e.target.value)}
+                    value={formData.email}
+                    onChange={(e) => handleChange("email", e.target.value)}
                     disabled={loading}
                   />
                 </Form.Group>
@@ -84,48 +86,6 @@ const Login = () => {
         </div>
       </Col>
     </Row>
-    // <div className="container">
-    //   <div className="vh-100 d-flex flex-column justify-content-center">
-    //     <h1 className="text-center mb-5">Welcome to My NextJS App.</h1>
-    //     <Row className="justify-content-center">
-    //       <Col md={4}>
-    //         <Form>
-    //           <Form.Group className="mb-3" controlId="formBasicEmail">
-    //             <Form.Label>Username</Form.Label>
-    //             <Form.Control
-    //               placeholder="Enter email"
-    //               value={formData.username}
-    //               onChange={(e) => handleChange("username", e.target.value)}
-    //               disabled={loading}
-    //             />
-    //           </Form.Group>
-
-    //           <Form.Group className="mb-3" controlId="formBasicPassword">
-    //             <Form.Label>Password</Form.Label>
-    //             <Form.Control
-    //               type="password"
-    //               placeholder="Password"
-    //               value={formData.password}
-    //               onChange={(e) => handleChange("password", e.target.value)}
-    //               disabled={loading}
-    //             />
-    //           </Form.Group>
-
-    //           <Button
-    //             variant="primary"
-    //             onClick={handleSubmit}
-    //             className="mx-auto"
-    //             disabled={loading}
-    //           >
-    //             {" "}
-    //             <span>Submit</span>
-    //             {loading && <Spinner className="ms-2" size="sm" />}
-    //           </Button>
-    //         </Form>
-    //       </Col>
-    //     </Row>
-    //   </div>
-    // </div>
   );
 };
 

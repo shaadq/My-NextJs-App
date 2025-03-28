@@ -6,9 +6,10 @@ import Cookies from "js-cookie";
 
 export default function Page() {
   const [user, setUser] = useState(null);
+  const cookieToken = Cookies.get("user");
 
   useEffect(() => {
-    setUser(JSON.parse(Cookies.get("user")));
+    setUser(JSON.parse(cookieToken));
   }, []);
 
   return (
@@ -20,7 +21,7 @@ export default function Page() {
         </div>
       </Header>
       <div className="content-wrapper">
-        <h2>Welcome, {user ? user.firstName + " " + user.lastName : ""}</h2>
+        <h2>Welcome</h2>
       </div>
     </div>
   );

@@ -8,8 +8,7 @@ import { toast } from "react-toastify";
 
 const AddEditUser = ({ show, data, onClose, setUsers }) => {
   const initialValue = {
-    firstName: "",
-    lastName: "",
+    name: "",
     username: "",
     password: "",
     email: "",
@@ -34,8 +33,8 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
     } catch (error) {
     } finally {
       onClose();
-      const data = await myServices.fetchAllUsers();
-      setUsers(data);
+      const users = await myServices.fetchAllUsers();
+      setUsers(users);
       setLoading(false);
       toast.info(`${data ? "User info updated!" : "New user added!"}`);
       setFormData(initialValue);
@@ -45,12 +44,9 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
   useEffect(() => {
     if (data) {
       setFormData({
-        firstName: data.firstName,
-        lastName: data.lastName,
+        name: data.name,
         email: data.email,
-        username: data.username,
         password: data.password,
-        address: data.address,
         role: data.role,
       });
     } else {
@@ -65,13 +61,15 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
 
   return (
     <Drawer
+      // maskClosable={false}
+      closable={false} // Hide the close (X) icon
       title={`${data ? "Edit User" : "Add User"}`}
       onClose={handleClose}
       open={show}
       width={500}
       extra={
         <Space>
-          <Button onClick={handleClose} variant="text">
+          <Button onClick={handleClose} variant="text" disabled={loading}>
             Cancel
           </Button>
           <Button onClick={handleSubmit} type="primary" disabled={loading}>
@@ -85,27 +83,13 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
         <Col>
           <div className="mb-3">
             <label htmlFor="" className="form-label fw-semibold">
-              First Name
+              Name
             </label>
             <Input
               type="text"
               placeholder="First Name"
-              value={formData?.firstName}
-              onChange={(e) => handleChange("firstName", e.target.value)}
-              disabled={loading}
-            />
-          </div>
-        </Col>
-        <Col>
-          <div className="mb-3">
-            <label htmlFor="" className="form-label fw-semibold">
-              Last Name
-            </label>
-            <Input
-              type="text"
-              placeholder="Last Name"
-              value={formData?.lastName}
-              onChange={(e) => handleChange("lastName", e.target.value)}
+              value={formData?.name}
+              onChange={(e) => handleChange("name", e.target.value)}
               disabled={loading}
             />
           </div>
@@ -120,34 +104,6 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
               placeholder="Email"
               value={formData?.email}
               onChange={(e) => handleChange("email", e.target.value)}
-              disabled={loading}
-            />
-          </div>
-        </Col>
-        <Col>
-          <div className="mb-3">
-            <label htmlFor="" className="form-label fw-semibold">
-              Address
-            </label>
-            <Input
-              type="text"
-              placeholder="Address"
-              value={formData?.address}
-              onChange={(e) => handleChange("address", e.target.value)}
-              disabled={loading}
-            />
-          </div>
-        </Col>
-        <Col>
-          <div className="mb-3">
-            <label htmlFor="" className="form-label fw-semibold">
-              Username
-            </label>
-            <Input
-              type="text"
-              placeholder="Username"
-              value={formData?.username}
-              onChange={(e) => handleChange("username", e.target.value)}
               disabled={loading}
             />
           </div>

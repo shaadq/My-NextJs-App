@@ -53,29 +53,29 @@ export const userRoles = {
   rolesDropdown: [
     {
       value: 1,
-      label: "admin",
+      label: "Admin",
     },
     {
       value: 2,
-      label: "moderator",
+      label: "Recruiter",
     },
     {
       value: 3,
-      label: "user",
+      label: "Job Seeker",
     },
   ],
   roles: {
     1: {
       class: "success",
-      text: "admin",
+      text: "Admin",
     },
     2: {
       class: "primary",
-      text: "moderator",
+      text: "Recruiter",
     },
     3: {
       class: "danger",
-      text: "user",
+      text: "Job Seeker",
     },
   },
 };
