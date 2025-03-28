@@ -11,6 +11,7 @@ export async function POST(req) {
         email,
         password,
         email_confirm: true, // ✅ Mark user as confirmed
+        display_name: name,
       });
 
     if (authError) {

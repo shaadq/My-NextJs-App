@@ -16,28 +16,52 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
   };
   const [formData, setFormData] = useState(initialValue);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const handleChange = (name, value) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: null,
+    }));
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.name?.trim()) newErrors.name = "Please Enter Name";
+    if (!formData.email?.trim()) {
+      newErrors.email = "Please Enter Email ID";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email.trim())) {
+      newErrors.email = "Invalid Email";
+    }
+    if (!formData.password?.trim())
+      newErrors.password = "Please Enter Password";
+    if (!formData.role?.trim()) newErrors.role = "Please Select Role";
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async () => {
-    setLoading(true);
-
-    try {
-      if (data) {
-        const response = await myServices.updateUser(data.id, formData);
-      } else {
-        const response = await myServices.addUser(formData);
+    if (validateForm()) {
+      console.log("form validated");
+      setLoading(true);
+      try {
+        if (data) {
+          await myServices.updateUser(data.id, formData);
+        } else {
+          await myServices.addUser(formData);
+        }
+      } catch (error) {
+      } finally {
+        onClose();
+        const users = await myServices.fetchAllUsers();
+        setUsers(users);
+        setLoading(false);
+        toast.info(`${data ? "User info updated!" : "New user added!"}`);
+        setFormData(initialValue);
       }
-    } catch (error) {
-    } finally {
-      onClose();
-      const users = await myServices.fetchAllUsers();
-      setUsers(users);
-      setLoading(false);
-      toast.info(`${data ? "User info updated!" : "New user added!"}`);
-      setFormData(initialValue);
     }
   };
 
@@ -56,6 +80,7 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
 
   const handleClose = () => {
     onClose();
+    setErrors({});
     setFormData(initialValue);
   };
 
@@ -88,10 +113,12 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
             <Input
               type="text"
               placeholder="First Name"
+              status={`${errors.name ? "error" : ""}`}
               value={formData?.name}
               onChange={(e) => handleChange("name", e.target.value)}
               disabled={loading}
             />
+            <div className="text-danger">{errors.name}</div>
           </div>
         </Col>
         <Col>
@@ -102,10 +129,12 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
             <Input
               type="text"
               placeholder="Email"
+              status={`${errors.email ? "error" : ""}`}
               value={formData?.email}
               onChange={(e) => handleChange("email", e.target.value)}
-              disabled={loading}
+              disabled={loading || data}
             />
+            <div className="text-danger">{errors.email}</div>
           </div>
         </Col>
         <Col>
@@ -116,10 +145,12 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
             <Input
               type="text"
               placeholder="Password"
+              status={`${errors.password ? "error" : ""}`}
               value={formData?.password}
               onChange={(e) => handleChange("password", e.target.value)}
               disabled={loading}
             />
+            <div className="text-danger">{errors.password}</div>
           </div>
         </Col>
         <Col>
@@ -130,14 +161,16 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
             <Select
               className="w-100"
               placeholder="Select a person"
+              status={`${errors.role ? "error" : ""}`}
               optionFilterProp="label"
               value={userRoles?.roles[formData.role]?.text}
               onChange={(e) => {
-                handleChange("role", e);
+                handleChange("role", e + "");
               }}
               options={userRoles.rolesDropdown}
               disabled={loading}
             />
+            <div className="text-danger">{errors.role}</div>
           </div>
         </Col>
       </Row>

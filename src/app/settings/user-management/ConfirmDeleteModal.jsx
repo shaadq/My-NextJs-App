@@ -24,16 +24,29 @@ const ConfirmDeleteModal = ({ show, name, id, setUsers, onClose }) => {
   return (
     <Modal
       centered
+      maskClosable={false}
+      closable={false}
       width={450}
       title="Confirm Delete User"
       open={show}
       onCancel={onClose}
       footer={[
         <div className="d-flex align-items-center justify-content-center">
-          <Button className="me-2" key="cancel" onClick={onClose}>
+          <Button
+            className="me-2"
+            key="cancel"
+            onClick={onClose}
+            disabled={loading}
+          >
             Cancel
           </Button>
-          <Button key="delete" type="primary" danger onClick={handleDelete}>
+          <Button
+            key="delete"
+            type="primary"
+            danger
+            onClick={handleDelete}
+            disabled={loading}
+          >
             {loading && <Spinner size="sm" />}
             Delete User
           </Button>
