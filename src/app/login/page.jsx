@@ -1,5 +1,6 @@
 import Login from "@/components/login/Login";
 import React from "react";
+import { ToastContainer } from "react-toastify";
 
 export const metadata = {
   title: "Next App - Login",
@@ -7,5 +8,15 @@ export const metadata = {
 };
 
 export default function Page() {
-  return <Login />;
+  return (
+    <div>
+      <ToastContainer
+        autoClose={2000}
+        position="bottom-right"
+        theme="colored"
+        draggable
+      />
+      <Login />
+    </div>
+  );
 }

@@ -10,7 +10,7 @@ const Login = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    email: "admin@admin.com",
+    email: "admin@gmail.com",
     password: "admin@123",
   });
 
@@ -28,7 +28,6 @@ const Login = () => {
       }
     } finally {
       setLoading(false);
-      toast.success("Login successful");
     }
   };
 
@@ -48,7 +47,7 @@ const Login = () => {
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label className="fw-semibold">Email</Form.Label>
                   <Form.Control
-                    placeholder="Enter email"
+                    placeholder="Enter Email"
                     value={formData.email}
                     onChange={(e) => handleChange("email", e.target.value)}
                     disabled={loading}
