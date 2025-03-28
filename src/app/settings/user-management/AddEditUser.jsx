@@ -9,10 +9,9 @@ import { toast } from "react-toastify";
 const AddEditUser = ({ show, data, onClose, setUsers }) => {
   const initialValue = {
     name: "",
-    username: "",
     password: "",
     email: "",
-    address: "",
+    role: null,
   };
   const [formData, setFormData] = useState(initialValue);
   const [loading, setLoading] = useState(false);
@@ -44,24 +43,25 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
   };
 
   const handleSubmit = async () => {
-    if (validateForm()) {
-      console.log("form validated");
-      setLoading(true);
-      try {
-        if (data) {
-          await myServices.updateUser(data.id, formData);
-        } else {
-          await myServices.addUser(formData);
-        }
-      } catch (error) {
-      } finally {
-        onClose();
-        const users = await myServices.fetchAllUsers();
-        setUsers(users);
-        setLoading(false);
-        toast.info(`${data ? "User info updated!" : "New user added!"}`);
-        setFormData(initialValue);
+    if (!validateForm()) return; // Stop execution if validation fails
+
+    setLoading(true);
+    try {
+      if (data) {
+        await myServices.updateUser(data.id, formData);
+      } else {
+        await myServices.addUser(formData, setErrors);
       }
+
+      onClose();
+      const users = await myServices.fetchAllUsers();
+      setUsers(users);
+      setFormData(initialValue);
+      toast.info(`${data ? "User info updated!" : "New user added!"}`);
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setLoading(false); // Ensure loading state resets even if there's an error
     }
   };
 
@@ -132,7 +132,7 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
               status={`${errors.email ? "error" : ""}`}
               value={formData?.email}
               onChange={(e) => handleChange("email", e.target.value)}
-              disabled={loading || data}
+              disabled={loading}
             />
             <div className="text-danger">{errors.email}</div>
           </div>

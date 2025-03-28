@@ -17,10 +17,30 @@ export async function PUT(req) {
       );
     }
 
-    const { error } = await supabase.from("users").update(data).eq("id", id);
+    // ✅ 1. Update the `users` table
+    const { error: userError } = await supabase
+      .from("users")
+      .update(data)
+      .eq("id", id);
 
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 400 });
+    if (userError) {
+      return NextResponse.json({ error: userError.message }, { status: 400 });
+    }
+
+    // ✅ 2. Update Supabase Auth table (`auth.users`)
+    const authUpdateData = {};
+
+    if (data.email) authUpdateData.email = data.email; // Update email if provided
+    if (data.name) authUpdateData.user_metadata = { name: data.name }; // Update display name
+
+    if (Object.keys(authUpdateData).length > 0) {
+      const { error: authError } = await supabase.auth.admin.updateUserById(
+        id,
+        authUpdateData
+      );
+      if (authError) {
+        return NextResponse.json({ error: authError.message }, { status: 400 });
+      }
     }
 
     return NextResponse.json({ message: "User updated successfully" });

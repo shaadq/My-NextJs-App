@@ -79,7 +79,7 @@ export const myServices = {
     }
   },
 
-  addUser: async (userData) => {
+  addUser: async (userData, setErrors) => {
     try {
       const response = await supabaseAxiosInstance.post(
         "/users/addUser",
@@ -87,6 +87,7 @@ export const myServices = {
       );
       return response.data;
     } catch (error) {
+      setErrors((prev) => ({ ...prev, email: error.response.data.error }));
       console.error("Error adding user:", error);
       throw error;
     }

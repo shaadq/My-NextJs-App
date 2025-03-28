@@ -10,7 +10,7 @@ const Login = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    email: "admin@gmail.com",
+    email: "admin@admin.com",
     password: "admin@123",
   });
 
