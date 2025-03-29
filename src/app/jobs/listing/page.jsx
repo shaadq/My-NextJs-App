@@ -11,10 +11,13 @@ import { MdDeleteOutline } from "react-icons/md";
 import { TbUserShare } from "react-icons/tb";
 import AddEditJob from "./AddEditJob";
 import { AiOutlineUserAdd } from "react-icons/ai";
+import { userService } from "@/service/json-service/userService";
 
 export default function JobListing() {
   const [loading, setLoading] = useState();
   const [jobs, setJobs] = useState([]);
+  const [recruiters, setRecruiters] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [drawer, setDrawer] = useState({ show: false, data: null });
 
   const handleEditClick = (record) => {
@@ -71,7 +74,7 @@ export default function JobListing() {
       render: (item, record) => (
         <div className="d-flex align-items-center">
           <TbUserShare />
-          <div className="ms-1">{record.users?.name}</div>
+          <div className="ms-1 text-wrap">{record.users?.name}</div>
         </div>
       ),
     },
@@ -79,7 +82,7 @@ export default function JobListing() {
       title: "Type",
       dataIndex: "job_type",
       key: "location",
-      width: 150,
+      width: 100,
       render: (item) => {
         return <div className="fw-semibold">{jobType.text[item]}</div>;
       },
@@ -126,8 +129,25 @@ export default function JobListing() {
   const fetchJobs = async () => {
     setLoading(true);
     try {
-      const data = await jobService.getJobs();
-      setJobs(data);
+      const jobs = await jobService.getJobs();
+      setJobs(jobs);
+
+      const recruiters = await userService.getRecruiters();
+      setRecruiters(
+        recruiters.map((item) => ({
+          value: item.id,
+          label: item.name,
+        }))
+      );
+
+      const categories = await jobService.getCategories();
+
+      setCategories(
+        categories.map((item) => ({
+          value: item.id,
+          label: item.name,
+        }))
+      );
     } catch (error) {
     } finally {
       setLoading(false);
@@ -137,6 +157,8 @@ export default function JobListing() {
   useEffect(() => {
     fetchJobs();
   }, []);
+
+  console.log(categories);
 
   return (
     <React.Fragment>
@@ -159,13 +181,15 @@ export default function JobListing() {
             dataSource={jobs}
             // pagination={{ pageSize: 20 }}
             // scroll={{ y: 100 * 5 }}
-            // scroll={{ x: "max-content" }}
+            scroll={{ x: "max-content" }}
           />
           <AddEditJob
             show={drawer.show}
             data={drawer.data}
             onClose={() => setDrawer({ show: false, data: null })}
             setJobs={setJobs}
+            recruiters={recruiters}
+            categories={categories}
           />
         </React.Fragment>
       )}

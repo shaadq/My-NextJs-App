@@ -11,13 +11,30 @@ export const jobService = {
     }
   },
 
+  updateJob: async (id, data) => {
+    try {
+      const response = await supabaseAxiosInstance.put(
+        "/jobs/listing/updateJob",
+        {
+          id,
+          data: data,
+        }
+      );
+
+      return response.data.jobs;
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+      throw error;
+    }
+  },
+
   //   Categories
   getCategories: async () => {
     try {
       const response = await supabaseAxiosInstance.get(
         "/jobs/category/getCategories"
       );
-      return response.data;
+      return response.data.categories;
     } catch (error) {
       console.error("Error fetching categoies:", error);
       throw error;
