@@ -233,7 +233,7 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
               </label>
               <Input
                 type="text"
-                placeholder="Password"
+                placeholder="Contact"
                 status={`${errors.contact ? "error" : ""}`}
                 value={formData?.contact}
                 onChange={(e) => handleChange("contact", e.target.value)}
@@ -249,7 +249,7 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
               </label>
               <Input
                 type="text"
-                placeholder="Password"
+                placeholder="Location"
                 status={`${errors.location ? "error" : ""}`}
                 value={formData?.location}
                 onChange={(e) => handleChange("location", e.target.value)}

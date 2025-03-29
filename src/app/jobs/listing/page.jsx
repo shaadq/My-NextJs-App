@@ -46,7 +46,9 @@ export default function JobListing() {
       dataIndex: "category",
       key: "category",
       width: 150,
-      render: (item, record) => <div>{record.job_categories?.name}</div>,
+      render: (item, record) => (
+        <div className="text-wrap">{record.job_categories?.name}</div>
+      ),
     },
     {
       title: "Salary Range",
@@ -92,6 +94,7 @@ export default function JobListing() {
       dataIndex: "status",
       key: "role",
       width: 100,
+      fixed: "right",
       render: (item) => {
         return (
           <Badge bg={`${jobStatus?.status[item]?.class}`}>
@@ -105,6 +108,7 @@ export default function JobListing() {
       dataIndex: "actions",
       key: "actions",
       width: 70,
+      fixed: "right",
       render: (item, record) => {
         const name = record.name;
         return (
@@ -170,7 +174,7 @@ export default function JobListing() {
             <h5 className="mb-0">Listing</h5>
             <Button type="primary" onClick={() => setDrawer({ show: true })}>
               <AiOutlineUserAdd className="fs-5" />
-              <span>Add User</span>
+              <span>Add New Job</span>
             </Button>
           </div>
 

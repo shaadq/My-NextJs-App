@@ -75,6 +75,7 @@ export default function UserManagement() {
       dataIndex: "role",
       key: "role",
       width: 100,
+      fixed: "right",
       render: (item) => {
         return (
           <Badge bg={`${userRoles?.roles[item]?.class}`}>
@@ -88,6 +89,7 @@ export default function UserManagement() {
       dataIndex: "actions",
       key: "actions",
       width: 70,
+      fixed: "right",
       render: (item, record) => {
         const name = record.name;
         return (

@@ -11,6 +11,19 @@ export const jobService = {
     }
   },
 
+  addJob: async (data) => {
+    try {
+      const response = await supabaseAxiosInstance.post(
+        "/jobs/listing/addJob",
+        data
+      );
+      return response.data; // Ensure you return the response data
+    } catch (error) {
+      console.error("Error adding job:", error);
+      throw error; // Re-throw error for proper error handling
+    }
+  },
+
   updateJob: async (id, data) => {
     try {
       const response = await supabaseAxiosInstance.put(

@@ -17,3 +17,8 @@ header,
   overflow: hidden;
   white-space: nowrap !important;
 }
+
+.error-row {
+  background-color: #ffebe6 !important; /* Light red */
+  color: #d32f2f !important; /* Darker red text */
+}

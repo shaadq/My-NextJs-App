@@ -41,15 +41,15 @@ export const userService = {
     }
   },
 
-  deleteUser: async (id) => {
+  deleteUser: async (id, setError) => {
     try {
-      console.log("service:", id);
       const response = await supabaseAxiosInstance.delete("/users/deleteUser", {
         data: { id },
       });
       await userProfilesService.deleteUserProfile(id);
-      return response.data;
+      return response;
     } catch (error) {
+      setError(error.response.data);
       console.error("Error deleting user:", error);
       throw error;
     }
