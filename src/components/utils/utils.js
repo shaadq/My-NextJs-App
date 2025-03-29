@@ -17,3 +17,7 @@ export const formatDate = (dateString) => {
 
   return `${formattedDate} ${formattedTime}`;
 };
+
+export const formatNumber = (value) => {
+  return (value / 100000).toFixed(2);
+};

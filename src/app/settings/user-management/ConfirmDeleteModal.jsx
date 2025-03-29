@@ -1,4 +1,4 @@
-import { myServices } from "@/service/json-service/service";
+import { userService } from "@/service/json-service/userService";
 import { Button, message, Modal } from "antd";
 import React, { useState } from "react";
 import { Spinner } from "react-bootstrap";
@@ -10,11 +10,11 @@ const ConfirmDeleteModal = ({ show, name, id, setUsers, onClose }) => {
     setLoading(true);
     try {
       console.log("modal:", id);
-      await myServices.deleteUser(id);
+      await userService.deleteUser(id);
     } catch (error) {
     } finally {
       onClose();
-      const data = await myServices.fetchAllUsers();
+      const data = await userService.fetchAllUsers();
       setUsers(data);
       setLoading(false);
       toast.error(`Removed ${name}`);

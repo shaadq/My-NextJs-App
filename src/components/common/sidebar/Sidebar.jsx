@@ -12,8 +12,8 @@ const Sidebar = () => {
 
   const list = [
     { title: "Dashboard", link: "/dashboard", icon: <MdOutlineDashboard /> },
-    { title: "Products", link: "/products", icon: <AiOutlineProduct /> },
-    { title: "Categories", link: "/categories", icon: <MdOutlineCategory /> },
+    { title: "Jobs", link: "/jobs", icon: <MdOutlineCategory /> },
+    { title: "Companies", link: "/companies", icon: <AiOutlineProduct /> },
     { title: "Settings", link: "/settings", icon: <AiOutlineSetting /> },
   ];
 

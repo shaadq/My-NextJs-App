@@ -2,7 +2,7 @@
 import CustomSpinner from "@/components/common/custom-spinner/CustomSpinner";
 import { formatDate } from "@/components/utils/utils";
 import { userRoles } from "@/enum-list/enumList";
-import { myServices } from "@/service/json-service/service";
+import { userService } from "@/service/json-service/userService";
 import { userProfilesService } from "@/service/json-service/userProfilesService";
 import { Button, Table } from "antd";
 import React, { useEffect, useState } from "react";
@@ -117,7 +117,7 @@ export default function UserManagement() {
   const fetchUsers = async () => {
     setLoading((prev) => ({ ...prev, users: true }));
     try {
-      const data = await myServices.fetchAllUsers();
+      const data = await userService.fetchAllUsers();
       setUsers(data);
     } catch (error) {
     } finally {

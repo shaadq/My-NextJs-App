@@ -3,26 +3,26 @@ import Header from "@/components/common/header/Header";
 import Logout from "@/components/common/logout/Logout";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { FaRegListAlt } from "react-icons/fa";
 import { IoDocumentAttachOutline } from "react-icons/io5";
-import { LiaUsersCogSolid } from "react-icons/lia";
-import { RiProfileLine } from "react-icons/ri";
+import { MdOutlineCategory } from "react-icons/md";
 
-export default function SettingsLayout({ children }) {
+export default function JobsLayout({ children }) {
   const pathname = usePathname();
   const tabs = [
     {
-      title: "User Management",
-      link: "/settings/user-management",
-      icon: <LiaUsersCogSolid />,
+      title: "Listing",
+      link: "/jobs/listing",
+      icon: <FaRegListAlt />,
     },
     {
-      title: "Profile",
-      link: "/settings/profile",
-      icon: <RiProfileLine />,
+      title: "Categories",
+      link: "/jobs/categories",
+      icon: <MdOutlineCategory />,
     },
     {
-      title: "Documents",
-      link: "/settings/document",
+      title: "Applications",
+      link: "/jobs/applications",
       icon: <IoDocumentAttachOutline />,
     },
   ];
@@ -31,7 +31,7 @@ export default function SettingsLayout({ children }) {
     <div>
       <Header>
         <div className="d-flex align-items-center justify-content-between h-100">
-          <h4 className="mb-0">Settings</h4>
+          <h4 className="mb-0">Jobs</h4>
           <Logout />
         </div>
       </Header>

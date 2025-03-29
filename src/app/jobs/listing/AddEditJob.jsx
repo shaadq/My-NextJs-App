@@ -1,25 +1,27 @@
 "use client";
 import CustomSpinner from "@/components/common/custom-spinner/CustomSpinner";
-import { userRoles } from "@/enum-list/enumList";
+import { jobStatus, jobType, userRoles } from "@/enum-list/enumList";
 import { userService } from "@/service/json-service/userService";
-import { userProfilesService } from "@/service/json-service/userProfilesService";
 import { Button, Drawer, Input, Select, Space } from "antd";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Col, Row, Spinner } from "react-bootstrap";
-import { toast } from "react-toastify";
 
-const AddEditUser = ({ show, data, onClose, setUsers }) => {
+const AddEditJob = ({ show, data, onClose, setJobs }) => {
   const initialValue = {
-    name: "",
-    password: "",
-    email: "",
-    role: null,
-    contact: "",
+    title: "",
+    description: "",
+    salary_from: "",
+    salary_to: null,
+    category: null,
     location: "",
+    type: null,
+    status: null,
+    recruiter_id: null,
   };
 
   const [formData, setFormData] = useState(initialValue);
   const [loading, setLoading] = useState({ button: false, page: false });
+  const [recruiters, setRecruiters] = useState([]);
   const [errors, setErrors] = useState({});
 
   const handleChange = (name, value) => {
@@ -47,49 +49,8 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async () => {
-    if (!validateForm()) return; // Stop execution if validation fails
-
-    setLoading((prev) => ({ ...prev, button: true }));
-    try {
-      const user_Payload = {
-        name: formData.name,
-        password: formData.password,
-        email: formData.email,
-        role: formData.role,
-      };
-      const userProfile_Payload1 = {
-        location: formData.location,
-        contact: formData.contact,
-      };
-
-      if (data) {
-        await userService.updateUser(data.id, user_Payload);
-        await userProfilesService.updateUserProfile(
-          // formData.userprofile_id,
-          data.id,
-          userProfile_Payload1
-        );
-      } else {
-        const response = await userService.addUser(user_Payload, setErrors);
-        const userProfile_Payload = {
-          location: formData.location,
-          contact: formData.contact,
-          user_id: response?.user?.id,
-        };
-        await userProfilesService.addUserProfile(userProfile_Payload);
-      }
-
-      onClose();
-      const users = await userService.fetchAllUsers();
-      toast.info(`${data ? "User info updated!" : "New user added!"}`);
-      setUsers(users);
-      setFormData(initialValue);
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      setLoading((prev) => ({ ...prev, button: false }));
-    }
+  const handleSubmit = () => {
+    console.log(formData);
   };
 
   const handleClose = () => {
@@ -98,39 +59,47 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
     setFormData(initialValue);
   };
 
-  const initialFunction = async () => {
-    setLoading((prev) => ({ ...prev, page: true }));
-    try {
-      if (data) {
-        const userProfileData =
-          await userProfilesService.getUserProfileByUserId(data.id);
-        setFormData({
-          name: data.name,
-          email: data.email,
-          password: data.password,
-          role: data.role,
-          userprofile_id: userProfileData.id,
-          location: userProfileData.location,
-          contact: userProfileData.contact,
-        });
-      } else {
-        setFormData(initialValue);
-      }
-    } catch (error) {
-    } finally {
-      setLoading((prev) => ({ ...prev, page: false }));
+  const initialFunction = () => {
+    if (data) {
+      setFormData({
+        title: data.title,
+        job_type: data.job_type,
+        salary_from: data.salary_from,
+        salary_to: data.salary_to,
+        location: data.location,
+        status: data.status,
+        recruiter_id: data.recruiter_id,
+        description: data.description,
+      });
+    } else {
+      setFormData(initialValue);
     }
+  };
+
+  const fetchRecruiters = async () => {
+    try {
+      const recruiters = await userService.getRecruiters();
+      setRecruiters(
+        recruiters.map((item) => ({
+          value: item.id,
+          label: item.name,
+        }))
+      );
+    } catch (error) {}
   };
 
   useEffect(() => {
     initialFunction();
   }, [data]);
 
+  useEffect(() => {
+    fetchRecruiters();
+  }, []);
+
   return (
     <Drawer
-      // maskClosable={false}
-      closable={false} // Hide the close (X) icon
-      title={`${data ? "Edit User" : "Add User"}`}
+      closable={false}
+      title={`${data ? "Edit Job" : "Add Job"}`}
       onClose={handleClose}
       open={show}
       width={500}
@@ -144,7 +113,7 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
             Cancel
           </Button>
           <Button
-            onClick={handleSubmit}
+            // onClick={handleSubmit}
             type="primary"
             disabled={loading.button || loading.page}
           >
@@ -161,66 +130,87 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
           <Col>
             <div className="mb-3">
               <label htmlFor="" className="form-label fw-semibold">
-                Name
+                Title
               </label>
               <Input
                 type="text"
-                placeholder="First Name"
-                status={`${errors.name ? "error" : ""}`}
-                value={formData?.name}
-                onChange={(e) => handleChange("name", e.target.value)}
+                placeholder="Job Title"
+                status={`${errors.title ? "error" : ""}`}
+                value={formData?.title}
+                onChange={(e) => handleChange("title", e.target.value)}
                 disabled={loading.button}
               />
-              <div className="text-danger">{errors.name}</div>
+              <div className="text-danger">{errors.title}</div>
             </div>
           </Col>
           <Col>
             <div className="mb-3">
               <label htmlFor="" className="form-label fw-semibold">
-                Email
+                Type
               </label>
-              <Input
-                type="text"
-                placeholder="Email"
-                status={`${errors.email ? "error" : ""}`}
-                value={formData?.email}
-                onChange={(e) => handleChange("email", e.target.value)}
-                disabled={loading.button || data}
+              <Select
+                className="w-100"
+                placeholder="Select Job Type"
+                status={`${errors.job_type ? "error" : ""}`}
+                optionFilterProp="label"
+                value={jobType?.text[formData.job_type]}
+                onChange={(e) => {
+                  handleChange("job_type", e + "");
+                }}
+                options={jobType.dropdown}
+                disabled={loading.button}
               />
               <div className="text-danger">{errors.email}</div>
             </div>
           </Col>
-          <Col>
+          <Col md={12}>
             <div className="mb-3">
               <label htmlFor="" className="form-label fw-semibold">
-                Password
+                Salary Range
               </label>
-              <Input
-                type="text"
-                placeholder="Password"
-                status={`${errors.password ? "error" : ""}`}
-                value={formData?.password}
-                onChange={(e) => handleChange("password", e.target.value)}
-                disabled={loading.button}
-              />
+              <Row md={2}>
+                <Col>
+                  <Input
+                    addonBefore="From (₹)"
+                    type="text"
+                    status={`${errors.salary_from ? "error" : ""}`}
+                    value={formData?.salary_from}
+                    onChange={(e) =>
+                      handleChange("salary_from", e.target.value)
+                    }
+                    disabled={loading.button}
+                  />
+                </Col>
+                <Col>
+                  <Input
+                    addonBefore="To (₹)"
+                    type="text"
+                    status={`${errors.salary_to ? "error" : ""}`}
+                    value={formData?.salary_to}
+                    onChange={(e) => handleChange("salary_to", e.target.value)}
+                    disabled={loading.button}
+                  />
+                </Col>
+              </Row>
+
               <div className="text-danger">{errors.password}</div>
             </div>
           </Col>
           <Col>
             <div className="mb-3">
               <label htmlFor="" className="form-label fw-semibold">
-                Role
+                Status
               </label>
               <Select
                 className="w-100"
                 placeholder="Select a person"
-                status={`${errors.role ? "error" : ""}`}
+                status={`${errors.status ? "error" : ""}`}
                 optionFilterProp="label"
-                value={userRoles?.roles[formData.role]?.text}
+                value={jobStatus?.text[formData.status]}
                 onChange={(e) => {
                   handleChange("role", e + "");
                 }}
-                options={userRoles.rolesDropdown}
+                options={jobStatus.dropdown}
                 disabled={loading.button}
               />
               <div className="text-danger">{errors.role}</div>
@@ -229,17 +219,20 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
           <Col>
             <div className="mb-3">
               <label htmlFor="" className="form-label fw-semibold">
-                Contact
+                Recruiter
               </label>
-              <Input
-                type="text"
-                placeholder="Password"
-                status={`${errors.contact ? "error" : ""}`}
-                value={formData?.contact}
-                onChange={(e) => handleChange("contact", e.target.value)}
+              <Select
+                className="w-100"
+                placeholder="Select a person"
+                status={errors.recruiter ? "error" : ""}
+                optionFilterProp="label"
+                value={formData?.recruiter_id || null} // Ensure correct value selection
+                onChange={(value) => handleChange("recruiter_id", value)}
+                options={recruiters || []} // Prevents errors if dropdown is undefined
                 disabled={loading.button}
               />
-              <div className="text-danger">{errors.contact}</div>
+
+              <div className="text-danger">{errors.recruiter}</div>
             </div>
           </Col>
           <Col>
@@ -264,4 +257,4 @@ const AddEditUser = ({ show, data, onClose, setUsers }) => {
   );
 };
 
-export default AddEditUser;
+export default AddEditJob;

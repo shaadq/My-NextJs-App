@@ -80,6 +80,69 @@ export const userRoles = {
   },
 };
 
+export const jobStatus = {
+  text: {
+    1: "Active",
+    2: "Closed",
+    3: "Pending Approval",
+  },
+  dropdown: [
+    {
+      value: 1,
+      label: "Active",
+    },
+    {
+      value: 2,
+      label: "Closed",
+    },
+    {
+      value: 3,
+      label: "Pending Approval",
+    },
+  ],
+  status: {
+    1: {
+      class: "primary",
+      text: "Active",
+    },
+    2: {
+      class: "danger",
+      text: "Closed",
+    },
+    3: {
+      class: "warning",
+      text: "Pending Approval",
+    },
+  },
+};
+
+export const jobType = {
+  text: {
+    1: "Full-time",
+    2: "Part-time",
+    3: "Remote",
+    4: "Internship",
+  },
+  dropdown: [
+    {
+      value: 1,
+      label: "Full-time",
+    },
+    {
+      value: 2,
+      label: "Part-time",
+    },
+    {
+      value: 3,
+      label: "Remote",
+    },
+    {
+      value: 4,
+      label: "Internship",
+    },
+  ],
+};
+
 export const pageTitleList = {
   titles: {
     login: "Next App - Login",

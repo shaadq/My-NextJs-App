@@ -1,7 +1,7 @@
 "use client";
 import Header from "@/components/common/header/Header";
 import Logout from "@/components/common/logout/Logout";
-import { myServices } from "@/service/json-service/service";
+import { userService } from "@/service/json-service/userService";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Col, Row, Spinner } from "react-bootstrap";
@@ -16,7 +16,7 @@ const ProductDetail = () => {
     const fetchProductByID = async () => {
       setLoading(true);
       try {
-        const data = await myServices.fetchProductByID(id);
+        const data = await userService.fetchProductByID(id);
         setSingleProduct(data);
       } catch (error) {
       } finally {

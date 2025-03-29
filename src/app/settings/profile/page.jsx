@@ -1,6 +1,6 @@
 "use client";
 import CustomSpinner from "@/components/common/custom-spinner/CustomSpinner";
-import { myServices } from "@/service/json-service/service";
+import { userService } from "@/service/json-service/userService";
 import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
@@ -14,7 +14,7 @@ export default function Profile() {
       setLoading(true);
       try {
         const userCookie = JSON.parse(Cookies.get("user"));
-        const data = await myServices.fetchSingleUser(userCookie.id);
+        const data = await userService.fetchSingleUser(userCookie.id);
         setUser(data);
       } catch (error) {
       } finally {
